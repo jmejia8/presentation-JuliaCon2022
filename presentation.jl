@@ -10,11 +10,11 @@ begin
 	using Metaheuristics
 end
 
+# ╔═╡ bf13fad4-21a0-4ad5-ad6a-bf75ffc8a6d5
+#TableOfContents()
+
 # ╔═╡ b76eeb4e-fb24-11ec-19cd-a148bff6f292
 html"<button onclick='present()'>Start Presentation</button>"
-
-# ╔═╡ bf13fad4-21a0-4ad5-ad6a-bf75ffc8a6d5
-TableOfContents()
 
 # ╔═╡ f0ecd7e3-30b6-46ff-8323-015e560c2a0c
 md"""
@@ -41,7 +41,7 @@ md"""
 - Swarm Swarm Intelligence: `PSO`, `ABC`.
 - Bio-inspired optimizer: `ECA`, `GSA`, etc.
 
-Suitable for constrained, multi-, many-objective and bilevel optimization. 
+Suitable for constrained, multi-, many-objective, and bilevel optimization. 
 """
 
 # ╔═╡ d036f1e3-d2c7-421a-85f3-78a1584b84bc
@@ -213,7 +213,7 @@ Minimize:
 
 $F(x) = \begin{pmatrix}f_1(x)\\ f_2(x) \\ \vdots \\ f_m(x) \end{pmatrix}$
 
-Availabel methods: `MOEA/D-DE, NSGA-II, NSGA-III, SMS-EMOA, SPEA2, CCMO,...`
+Available methods: `MOEA/D-DE, NSGA-II, NSGA-III, SMS-EMOA, SPEA2, CCMO,...`
 
 ### Example
 
@@ -307,13 +307,13 @@ Supported MCDM methods:
 md"""
 ### Conclusions and Future Work
 
-`Metaheuristics.jl` can be used for different kind of optimization problems.
+`Metaheuristics.jl` can be used for different kinds of optimization problems.
 It contains challenging benchmark problems for testing algorithms, visualization features, multi-criteria decision-making, and performance indicators to assess the algorithm performance.
 
 **Future Work:**
 
 - Island-based Optimization (parallel/distributed algorithms)
-- Visualizaton recipes for Plots/Makie
+- Visualization recipes for Plots/Makie
 - Methods for trivial comparisons among algorithms
 
 """
@@ -842,8 +842,8 @@ uuid = "3f19e933-33d8-53b3-aaab-bd5110c3b7a0"
 
 # ╔═╡ Cell order:
 # ╠═286b7e2b-8773-4197-9fe1-9b32844604ac
-# ╟─b76eeb4e-fb24-11ec-19cd-a148bff6f292
 # ╟─bf13fad4-21a0-4ad5-ad6a-bf75ffc8a6d5
+# ╟─b76eeb4e-fb24-11ec-19cd-a148bff6f292
 # ╟─f0ecd7e3-30b6-46ff-8323-015e560c2a0c
 # ╟─3bcdf9d2-b2f2-4e68-a505-b9b1a6078c63
 # ╟─d036f1e3-d2c7-421a-85f3-78a1584b84bc
