@@ -11,19 +11,23 @@ begin
 end
 
 # ╔═╡ bf13fad4-21a0-4ad5-ad6a-bf75ffc8a6d5
-#TableOfContents()
+TableOfContents(title="Outline", depth=2, aside=true)
 
 # ╔═╡ b76eeb4e-fb24-11ec-19cd-a148bff6f292
 html"<button onclick='present()'>Start Presentation</button>"
+
+# ╔═╡ fc8e0b26-8933-4c26-9d7f-3b24bdb665f5
+
 
 # ╔═╡ f0ecd7e3-30b6-46ff-8323-015e560c2a0c
 md"""
 # Metaheuristics.jl: Towards Any Optimization
 
- ![Metaheuristics Logo](https://raw.githubusercontent.com/jmejia8/Metaheuristics.jl/master/docs/src/assets/logo-big.png)
-
 - **Jesús-Adolfo Mejía-de-Dios**
 - Twitter: **_jmejia**
+- Repo: [github.com/jmejia8/Metaheuristics.jl](https://github.com/jmejia8/Metaheuristics.jl)
+
+ ![Metaheuristics Logo](https://raw.githubusercontent.com/jmejia8/Metaheuristics.jl/master/docs/src/assets/logo-big.png)
 
 """
 
@@ -38,7 +42,7 @@ md"""
 `Metaheuristics.jl` is a framework that contains **metaheuristics** for hard optimization problems.
 
 - Evolutionary Algorithms: `GA`, `DE`, etc.
-- Swarm Swarm Intelligence: `PSO`, `ABC`.
+- Swarm Intelligence: `PSO`, `ABC`.
 - Bio-inspired optimizer: `ECA`, `GSA`, etc.
 
 Suitable for constrained, multi-, many-objective, and bilevel optimization. 
@@ -75,7 +79,7 @@ optimize(f, bounds, method)
 - Support for single-, multi-, many-objective optimization. 
 - Contain scalable test problems.
 - Visualization in console via [UnicodePlots.jl](https://github.com/JuliaPlots/UnicodePlots.jl).
-```
+```julia
         ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀F space⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀ 
         ┌────────────────────────────────────────┐ 
       2 │⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀│ 
@@ -97,6 +101,8 @@ optimize(f, bounds, method)
         ⠀0⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀1⠀ 
         ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀f₁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀ 
 ```
+- Performance Indicators
+- Multi-criteria decision-making
 
 """
 
@@ -109,7 +115,7 @@ Minimize:
 $f(x) = \sum_{i=1}^n (x_i - 1.234)^2$
 with $x \in [-6, 6]^n,\ n = 5$.
 
-Optimize in three lines!
+**Optimization in three lines!**
 """
 
 # ╔═╡ 11134431-54ef-4d9f-9b6f-9676df1645d2
@@ -142,11 +148,16 @@ termination_status_message(results)
 md"""
 ### Selecting a Metaheuristic
 
-Possible optimizers: `ECA, DE, PSO, ABC, GSA, SA, WOA, MCCGA, ...`
+Available [optimizers](https://jmejia8.github.io/Metaheuristics.jl/stable/algorithms/#Algorithms): `ECA, DE, PSO, ABC, GSA, SA, WOA, MCCGA, ...`
 """
 
 # ╔═╡ 1382f72c-5477-4eba-aaf2-787db778ef03
-optimize(f, bounds, PSO())
+optimize(f, bounds, SA())
+
+# ╔═╡ a2601e7f-384a-4953-ac07-3962356fc877
+md"""
+> Use metaheuristic algorithms when exact methods cannot be used!
+"""
 
 # ╔═╡ 56875cdb-da71-4bdd-a675-bd8cc96add37
 md"""
@@ -168,7 +179,7 @@ options = Options(f_calls_limit=20_000, seed=1, f_tol=1e-5);
 information = Information(f_optimum=0.0);
 
 # ╔═╡ 108c3564-03d9-4acd-a652-f4884a05a74d
-optimize(f, bounds, ECA(;options, information))
+optimize(f, bounds, DE(;options, information))
 
 # ╔═╡ ea13314e-0dd0-48f3-8dbd-a6ec2e282f18
 md"""
@@ -190,15 +201,15 @@ where $-2 \leq x,y \leq 2$.
 # ╔═╡ 9d326f84-d152-4a3a-bcc5-ac3fe5e419b8
 function f_constrained(x⃗)
     x,y = x⃗[1], x⃗[2]
-    fx = (1-x)^2+100(y-x^2)^2 # Objective function
-    gx = x^2 + y^2 - 2        # inequality constraints
-    hx = 0.0                  # equality constraints
+    fx = (1 - x)^2 + 100(y - x^2)^2 # Objective function
+    gx = x^2 + y^2 - 2              # inequality constraints
+    hx = 0.0                        # equality constraints
     # order is important
     fx, [gx], [hx]
 end
 
 # ╔═╡ dfd2d386-0b52-4ac4-bf00-cff29ce6cbfa
-bounds_constrained = [-2.0 -2; 2 2];
+bounds_constrained = [-2 -2; 2 2.];
 
 # ╔═╡ 2dd0f115-8c3e-40a5-b4f1-ae2a434f417a
 optimize(f_constrained, bounds_constrained, DE(N=50))
@@ -212,6 +223,29 @@ A Multi-objective problem aims to minimize multiple conflicting objectives simul
 Minimize: 
 
 $F(x) = \begin{pmatrix}f_1(x)\\ f_2(x) \\ \vdots \\ f_m(x) \end{pmatrix}$
+
+```
+                          F space
+         ┌────────────────────────────────────────┐ 
+       1 │⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀│ 
+         │⠄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀│ 
+         │⠈⠄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀│ 
+         │⠀⠈⢆⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀│ 
+         │⠀⠀⠀⠢⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀│ 
+         │⠀⠀⠀⠀⠈⠢⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀│ 
+         │⠀⠀⠀⠀⠀⠀⠉⠢⡄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀│ 
+   f_2   │⠀⠀⠀⠀⠀⠀⠀⠀⠈⠑⢤⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀│ 
+         │⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠲⢄⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀│ 
+         │⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠒⢤⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀│ 
+         │⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠙⠢⢄⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀│ 
+         │⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠑⠢⢄⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀│ 
+         │⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠉⠢⠤⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀│ 
+         │⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠉⠑⠢⢤⣀⠀⠀⠀⠀⠀│ 
+       0 │⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠉⠒⠢⢄⣀│ 
+         └────────────────────────────────────────┘ 
+         0                                        1
+                            f_1
+```
 
 Available methods: `MOEA/D-DE, NSGA-II, NSGA-III, SMS-EMOA, SPEA2, CCMO,...`
 
@@ -229,40 +263,24 @@ function f_mo(x)
     fx1 = x[1] * v
     fx2 = (1 - sqrt(x[1])) * v
 
-	
-    # constraints
-    gx = [0.0] # inequality constraints
-    hx = [0.0] # equality constraints
+    gx = 0.0 # inequality constraints
+    hx = 0.0 # equality constraints
 
     # order is important
-    return [fx1, fx2], gx, hx
+    return [fx1, fx2], [gx], [hx]
 end
 
 # ╔═╡ 7777c4ce-69e3-4b57-9952-9cc17112dfc9
 bounds_mo = [zeros(10) ones(10)];
 
 # ╔═╡ 35e3ac1a-0891-4f09-b4ee-c05772e70ff4
-result_mo = optimize(f_mo, bounds_mo, NSGA2())
+result_mo = optimize(f_mo, bounds_mo, NSGA2());
+
+# ╔═╡ d4cc057f-719b-487d-a5e6-c9efa986a0f2
+result_mo
 
 # ╔═╡ ba556627-5487-4384-b8b9-7886d6e3ea8d
 pareto_front(result_mo)
-
-# ╔═╡ 74f70ba2-d310-44b1-ab9a-9dc0f60fe1db
-md"""
-## Test Problems
-"""
-
-# ╔═╡ ab39b621-5387-4980-b07e-e1c497b988f7
-F, boundaries, pf = Metaheuristics.TestProblems.get_problem(:DTLZ2);
-
-# ╔═╡ acce65a8-5394-4ee0-9b65-f36ced878da9
-boundaries
-
-# ╔═╡ e946125d-1035-4988-96e0-3376cdb52432
-pf
-
-# ╔═╡ 80d5e0f8-7275-466a-a3f2-1a09c7cedbfc
-optimize(F, boundaries, SPEA2())
 
 # ╔═╡ 035775a9-e913-4d3f-910c-2727e36bb446
 md"""
@@ -303,9 +321,35 @@ Supported MCDM methods:
 * ... and many more.
 """
 
+# ╔═╡ 1865bac4-ed1e-4edb-b6b7-df00f5770e3f
+md"""
+## Performance Indicators
+
+Performance Indicators are used to assess algorithms (quality of solutions).
+
+![Performance Indicators](https://jmejia8.github.io/Metaheuristics.jl/stable/figs/performance-indicators.png)
+"""
+
+# ╔═╡ 74f70ba2-d310-44b1-ab9a-9dc0f60fe1db
+md"""
+## Test Problems
+"""
+
+# ╔═╡ ab39b621-5387-4980-b07e-e1c497b988f7
+F, boundaries, pf = Metaheuristics.TestProblems.get_problem(:DTLZ2);
+
+# ╔═╡ acce65a8-5394-4ee0-9b65-f36ced878da9
+boundaries
+
+# ╔═╡ e946125d-1035-4988-96e0-3376cdb52432
+pf
+
+# ╔═╡ 80d5e0f8-7275-466a-a3f2-1a09c7cedbfc
+optimize(F, boundaries, SPEA2())
+
 # ╔═╡ 48fdba46-abfd-43ff-9484-4a37582db392
 md"""
-### Conclusions and Future Work
+## Conclusions and Future Work
 
 `Metaheuristics.jl` can be used for different kinds of optimization problems.
 It contains challenging benchmark problems for testing algorithms, visualization features, multi-criteria decision-making, and performance indicators to assess the algorithm performance.
@@ -315,12 +359,13 @@ It contains challenging benchmark problems for testing algorithms, visualization
 - Island-based Optimization (parallel/distributed algorithms)
 - Visualization recipes for Plots/Makie
 - Methods for trivial comparisons among algorithms
+- Add more optimizers
 
 """
 
 # ╔═╡ e242ff2a-3359-4d53-b278-5bb3f63ea596
 md"""
-## Thank you for your attention!
+### Thank you for your attention!
 
 **Contact:**
 
@@ -842,8 +887,9 @@ uuid = "3f19e933-33d8-53b3-aaab-bd5110c3b7a0"
 
 # ╔═╡ Cell order:
 # ╠═286b7e2b-8773-4197-9fe1-9b32844604ac
-# ╟─bf13fad4-21a0-4ad5-ad6a-bf75ffc8a6d5
+# ╠═bf13fad4-21a0-4ad5-ad6a-bf75ffc8a6d5
 # ╟─b76eeb4e-fb24-11ec-19cd-a148bff6f292
+# ╠═fc8e0b26-8933-4c26-9d7f-3b24bdb665f5
 # ╟─f0ecd7e3-30b6-46ff-8323-015e560c2a0c
 # ╟─3bcdf9d2-b2f2-4e68-a505-b9b1a6078c63
 # ╟─d036f1e3-d2c7-421a-85f3-78a1584b84bc
@@ -857,8 +903,9 @@ uuid = "3f19e933-33d8-53b3-aaab-bd5110c3b7a0"
 # ╠═873ecc84-9498-4a3a-a3a7-c3e2ad41e97f
 # ╠═18393db7-a3f1-4052-84a3-730360d4bd03
 # ╠═2cd3659b-e096-4690-9d87-653e747f613f
-# ╠═36eba6ca-bdff-48f5-b8b0-ac9c3f68532b
+# ╟─36eba6ca-bdff-48f5-b8b0-ac9c3f68532b
 # ╠═1382f72c-5477-4eba-aaf2-787db778ef03
+# ╟─a2601e7f-384a-4953-ac07-3962356fc877
 # ╟─56875cdb-da71-4bdd-a675-bd8cc96add37
 # ╠═a5cd3634-33b0-4440-be8d-b6c86bc42b67
 # ╠═4f84c95a-f926-4564-82e1-4422829e84c6
@@ -871,17 +918,19 @@ uuid = "3f19e933-33d8-53b3-aaab-bd5110c3b7a0"
 # ╠═6bb585b7-b40e-4887-a41f-28e08316317d
 # ╠═7777c4ce-69e3-4b57-9952-9cc17112dfc9
 # ╠═35e3ac1a-0891-4f09-b4ee-c05772e70ff4
+# ╠═d4cc057f-719b-487d-a5e6-c9efa986a0f2
 # ╠═ba556627-5487-4384-b8b9-7886d6e3ea8d
-# ╟─74f70ba2-d310-44b1-ab9a-9dc0f60fe1db
-# ╠═ab39b621-5387-4980-b07e-e1c497b988f7
-# ╠═acce65a8-5394-4ee0-9b65-f36ced878da9
-# ╠═e946125d-1035-4988-96e0-3376cdb52432
-# ╠═80d5e0f8-7275-466a-a3f2-1a09c7cedbfc
 # ╟─035775a9-e913-4d3f-910c-2727e36bb446
 # ╠═de3a7763-14b8-4183-9c2b-131c19ee7dd1
 # ╠═d627c8d3-2bd0-44f9-a8e0-d93529a869c2
 # ╠═0965b8f5-b9c3-4210-b257-5732486170c4
 # ╟─2a86b751-4607-43f7-8ffd-00faf41a278a
+# ╟─1865bac4-ed1e-4edb-b6b7-df00f5770e3f
+# ╟─74f70ba2-d310-44b1-ab9a-9dc0f60fe1db
+# ╠═ab39b621-5387-4980-b07e-e1c497b988f7
+# ╠═acce65a8-5394-4ee0-9b65-f36ced878da9
+# ╠═e946125d-1035-4988-96e0-3376cdb52432
+# ╠═80d5e0f8-7275-466a-a3f2-1a09c7cedbfc
 # ╟─48fdba46-abfd-43ff-9484-4a37582db392
 # ╟─e242ff2a-3359-4d53-b278-5bb3f63ea596
 # ╟─00000000-0000-0000-0000-000000000001
